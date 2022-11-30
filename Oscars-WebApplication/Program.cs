@@ -1,25 +1,10 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using Oscars_WebApplication.Configuration;
-using Oscars_WebApplication.Data;
+using Oscars_WebApplication.Installers;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-string? connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<DataContext>(options =>
-    options.UseSqlite(connectionString));
-
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<DataContext>();
-
-builder.Services.AddControllersWithViews();
-
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo {Title = "Oscar's API", Version = "v1"});
-});
+builder.Services.InstallServicesInAssembly(builder.Configuration);
 
 WebApplication app = builder.Build();
 
