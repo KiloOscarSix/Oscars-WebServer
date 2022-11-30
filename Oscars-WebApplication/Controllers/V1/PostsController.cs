@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Oscars_WebApplication.Contracts.V1;
 using Oscars_WebApplication.Contracts.V1.Requests;
+using Oscars_WebApplication.Contracts.V1.Responses;
 using Oscars_WebApplication.Domain;
 
 namespace Oscars_WebApplication.Controllers.V1;
@@ -26,7 +27,7 @@ public class PostsController : Controller
     }
 
     [HttpGet(ApiRoutes.Posts.Get)]
-    public IActionResult Get()
+    public IActionResult Get(string postId)
     {
         return Ok();
     }
@@ -46,7 +47,7 @@ public class PostsController : Controller
         string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
         string locationUrl = $"{baseUrl}/{ApiRoutes.Posts.Get.Replace("{postId}", post.Id)}";
 
-        Post response = new() {Id = post.Id};
+        PostResponse response = new() {Id = post.Id};
         
         return Created(locationUrl, response);
     }

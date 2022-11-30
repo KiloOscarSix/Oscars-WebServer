@@ -12,4 +12,11 @@ public static class ApiRoutes
         public const string Get = $"{Base}/posts/{{postId}}";
         public const string Create = $"{Base}/posts";
     }
+    
+    public static class LovenseCallback
+    {
+        public const string GetAll = $"{Base}/lovense/users";
+        public const string Get = $"{Base}/lovense/users/{{userId}}";
+        public const string Create = $"{Base}/lovense/users";
+    }
 }
