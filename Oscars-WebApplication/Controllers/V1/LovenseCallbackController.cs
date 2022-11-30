@@ -3,28 +3,29 @@ using Oscars_WebApplication.Contracts.V1;
 using Oscars_WebApplication.Contracts.V1.Requests;
 using Oscars_WebApplication.Contracts.V1.Responses;
 using Oscars_WebApplication.Domain;
+using Oscars_WebApplication.Services;
 
 namespace Oscars_WebApplication.Controllers.V1;
 
 public class LovenseCallbackController : Controller
 {
-    private readonly Dictionary<string, LovenseUser> _users;
+    private readonly ILovenseService _lovenseService;
 
-    public LovenseCallbackController()
+    public LovenseCallbackController(ILovenseService lovenseService)
     {
-        _users = new Dictionary<string, LovenseUser>();
+        _lovenseService = lovenseService;
     }
 
     [HttpGet(ApiRoutes.LovenseCallback.GetAll)]
     public IActionResult GetAll()
     {
-        return Ok(_users);
+        return Ok(_lovenseService.GetUsers());
     }
     
     [HttpGet(ApiRoutes.LovenseCallback.Get)]
     public IActionResult Get(string userId)
     {
-        return Ok(_users[userId]);
+        return Ok(_lovenseService.GetUserById(userId));
     }
     
     [HttpPost(ApiRoutes.LovenseCallback.Create)]
@@ -60,7 +61,7 @@ public class LovenseCallbackController : Controller
             Platform = callbackRequest.Platform
         };
 
-        _users.Add(user.Uid, user);
+        _lovenseService.CreateUser(user.Uid, user);
 
         string baseUrl = $"{HttpContext.Request.Scheme}://{HttpContext.Request.Host.ToUriComponent()}";
         string locationUrl = $"{baseUrl}/{ApiRoutes.LovenseCallback.Get.Replace("{userId}", user.Uid)}";

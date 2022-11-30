@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Oscars_WebApplication.Data;
+using Oscars_WebApplication.Services;
 
 namespace Oscars_WebApplication.Installers;
 
@@ -14,5 +15,8 @@ public class DbInstaller : IInstaller
 
         services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
             .AddEntityFrameworkStores<DataContext>();
+
+        services.AddSingleton<IPostService, PostService>();
+        services.AddSingleton<ILovenseService, LovenseService>();
     }
 }
